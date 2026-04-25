@@ -146,15 +146,6 @@ window.GameRenderer = {
                     ctx.scale(1.5, 1.5); // sword larger on ground too
                 }
 
-                // Highlight weapons with a glow effect
-                ctx.shadowColor = 'rgba(255, 255, 255, 0.9)';
-                ctx.shadowBlur = 15;
-                // Add a glowing circle under the weapon to make it pop more
-                ctx.beginPath();
-                ctx.arc(0, 0, 20, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-                ctx.fill();
-
                 if (w.type.image) {
                     ctx.drawImage(w.type.image, -15, -15, 30, 30);
                 } else {
@@ -163,7 +154,6 @@ window.GameRenderer = {
                     ctx.textBaseline = 'middle';
                     ctx.fillText(w.type.symbol, 0, 0);
                 }
-                ctx.shadowBlur = 0; // reset
             }
             ctx.restore();
         }
