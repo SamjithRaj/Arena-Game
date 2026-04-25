@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('startBtn');
     const restartBtn = document.getElementById('restartBtn');
     const envSelect = document.getElementById('environmentSelect');
+    const dashboardBtn = document.getElementById('dashboardBtn');
 
     const updateHealthDisplay = () => {
         const playerHealthDiv = document.getElementById('playerHealth');
@@ -112,6 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     startBtn.addEventListener('click', startGame);
     restartBtn.addEventListener('click', startGame);
+    dashboardBtn.addEventListener('click', () => {
+        gameOverDiv.style.display = 'none';
+        gameContainer.style.display = 'none';
+        gameUI.style.display = 'none';
+        mainMenu.style.display = 'flex';
+    });
 
     // Initial load screen timeout
     setTimeout(() => {
