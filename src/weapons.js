@@ -4,16 +4,16 @@ window.WeaponSystem = {
     weaponSpawnTimer: 0,
     
     weaponTypes: [
-        { name: 'sword', damage: 2, color: '#c0c0c0', symbol: '⚔️', type: 'melee', range: 0 },
-        { name: 'hammer', damage: 3, color: '#8b4513', symbol: '🔨', type: 'melee', range: 0, knockback: 8 },
-        { name: 'axe', damage: 2, color: '#696969', symbol: '🪓', type: 'melee', range: 0 },
-        { name: 'spear', damage: 2, color: '#4169e1', symbol: '🗡️', type: 'melee', range: 30 },
+        { name: 'sword', damage: 1, color: '#c0c0c0', symbol: '⚔️', type: 'melee', range: 0 },
+        { name: 'hammer', damage: 1, color: '#8b4513', symbol: '🔨', type: 'melee', range: 0, knockback: 8 },
+        { name: 'axe', damage: 1, color: '#696969', symbol: '🪓', type: 'melee', range: 0 },
+        { name: 'spear', damage: 1, color: '#4169e1', symbol: '🗡️', type: 'melee', range: 30 },
         // Shotgun: wider spread (0.6 instead of 0.3), 12 pellets
-        { name: 'shotgun', damage: 1, color: '#8b0000', symbol: '🔫', image: window.GameAssets.shotgunImg, type: 'ranged', range: 150, spread: 0.6, pellets: 12, recoil: 12 },
+        { name: 'shotgun', damage: 3, color: '#8b0000', symbol: '🔫', image: window.GameAssets.shotgunImg, type: 'ranged', range: 150, spread: 0.6, pellets: 12, recoil: 12 },
         // Pistol: infinite range (Infinity), 1 bullet, no fall off
-        { name: 'pistol', damage: 1, color: '#2f4f4f', symbol: '🔫', image: window.GameAssets.pistolImg, type: 'ranged', range: Infinity, spread: 0.0, pellets: 1, recoil: 3 },
+        { name: 'pistol', damage: 2, color: '#2f4f4f', symbol: '🔫', image: window.GameAssets.pistolImg, type: 'ranged', range: Infinity, spread: 0.0, pellets: 1, recoil: 3 },
         // Shield: adds an aura
-        { name: 'shield', damage: 0, color: '#4169e1', symbol: '🛡️', type: 'defense', durability: 5, blockDamage: true }
+        { name: 'shield', damage: 0, color: '#4169e1', symbol: '🛡️', type: 'defense', durability: 1, blockDamage: true }
     ],
 
     spawnWeapon(centerX, centerY, arenaRadius) {
