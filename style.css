@@ -283,9 +283,15 @@ canvas {
 /* Game Over Screen */
 #gameOver {
     position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 60;
-    padding: 50px 80px;
+    padding: 40px 60px;
     text-align: center;
+    background: rgba(10, 15, 30, 0.85);
+    border-right: 4px solid rgba(0, 217, 255, 0.5);
+    border-radius: 15px 0 0 15px;
 }
 
 #gameOver h2 {

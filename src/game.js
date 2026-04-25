@@ -61,16 +61,16 @@ window.GameCore = {
 
     spawnParticles(x, y, color, type) {
         if (type === 'death') {
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 400; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 8 + 2;
+                const speed = Math.random() * 15 + 2;
                 this.particles.push({
                     x: x, y: y,
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed,
-                    size: Math.random() * 10 + 5,
-                    life: 60 + Math.random() * 30,
-                    maxLife: 90,
+                    size: Math.random() * 6 + 1,
+                    life: 60 + Math.random() * 60,
+                    maxLife: 120,
                     color: color,
                     type: 'pixel'
                 });
