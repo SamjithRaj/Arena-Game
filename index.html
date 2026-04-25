@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena Battle - Ultimate</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen">
+        <div class="loader">
+            <div class="spinner"></div>
+            <h2 id="loadingText">Configuring Matrix...</h2>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="mainMenu" style="display: none;">
+        <div class="menu-content glass-panel">
+            <h1 class="game-title">ARENA <span>BATTLE</span></h1>
+            
+            <div class="color-picker-section">
+                <h3>Select Armor Energy</h3>
+                <div class="colorOptions">
+                    <div class="colorBtn selected" style="background: #00d9ff;" data-color="#00d9ff"></div>
+                    <div class="colorBtn" style="background: #ff006e;" data-color="#ff006e"></div>
+                    <div class="colorBtn" style="background: #ffd60a;" data-color="#ffd60a"></div>
+                    <div class="colorBtn" style="background: #00ff88;" data-color="#00ff88"></div>
+                    <div class="colorBtn" style="background: #9d4edd;" data-color="#9d4edd"></div>
+                </div>
+            </div>
+
+            <div class="environment-picker-section">
+                <h3>Select Combat Zone</h3>
+                <select id="environmentSelect">
+                    <option value="arena">Holo Arena</option>
+                    <option value="fuji">Mount Fuji</option>
+                    <option value="ocean">Open Ocean</option>
+                </select>
+            </div>
+
+            <button id="startBtn" class="primary-btn">INITIALIZE COMBAT</button>
+        </div>
+    </div>
+
+    <!-- Game HUD -->
+    <div id="gameUI" style="display: none;">
+        <div class="player-hud">
+            <div class="hud-label">PLAYER <span id="playerWeaponIcon"></span></div>
+            <div class="healthBar" id="playerHealth"></div>
+        </div>
+        <div class="enemy-hud">
+            <div class="hud-label"><span id="aiWeaponIcon"></span> ENEMY</div>
+            <div class="healthBar" id="aiHealth"></div>
+        </div>
+    </div>
+
+    <!-- Game Canvas -->
+    <div id="gameContainer" style="display: none;">
+        <canvas id="gameCanvas" width="1024" height="768"></canvas>
+    </div>
+
+    <!-- Action Screen (Game Over) -->
+    <div id="gameOver" style="display: none;" class="glass-panel">
+        <h2 id="gameOverText">MISSION FAILED</h2>
+        <button id="restartBtn" class="primary-btn">REDEPLOY</button>
+    </div>
+
+    <script src="src/config.js"></script>
+    <script src="src/renderer.js"></script>
+    <script src="src/weapons.js"></script>
+    <script src="src/game.js"></script>
+    <script src="src/main.js"></script>
+</body>
+</html>
