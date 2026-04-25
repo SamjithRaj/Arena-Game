@@ -27,6 +27,9 @@ window.WeaponSystem = {
             timer: 210
         };
         this.weapons.push(weapon);
+        if (window.GameCore && window.GameCore.spawnParticles) {
+            window.GameCore.spawnParticles(weapon.x, weapon.y, weapon.type.color, 'ring');
+        }
     },
 
     shootWeapon(shooter, target) {

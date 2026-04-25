@@ -43,6 +43,7 @@ window.GameRenderer = {
     },
 
     drawEntity(entity, time) {
+        if (entity.dead) return;
         const ctx = this.ctx;
         if (entity.blinkTimer > 0 && Math.floor(entity.blinkTimer / 5) % 2 === 0) {
             return;
@@ -200,5 +201,30 @@ window.GameRenderer = {
             ctx.fillText('❤', 0, 0);
             ctx.restore();
         });
+    },
+
+    drawParticles(particles) {
+        const ctx = this.ctx;
+        for (const p of particles) {
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            if (p.type === 'pixel') {
+                const alpha = p.life / p.maxLife;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = alpha;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            } else if (p.type === 'ring') {
+                const alpha = Math.max(0, p.life / p.maxLife);
+                ctx.strokeStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 15;
+                ctx.globalAlpha = alpha;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(0, 0, p.radius, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
     }
 };

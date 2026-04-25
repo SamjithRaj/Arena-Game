@@ -33,6 +33,8 @@ window.GameCore = {
         window.WeaponSystem.weaponSpawnTimer = 0;
         this.hearts = [];
         this.heartSpawnTimer = 0;
+        this.particles = [];
+        this.deathDelay = 0;
         window.GameState.time = 0;
         
         this.uiCallback();
@@ -57,32 +59,86 @@ window.GameCore = {
         }
     },
 
-    update() {
-        const keys = window.GameState.keys;
-        const speedAmt = 0.4;
-        if (keys['w']) this.player.vy -= speedAmt;
-        if (keys['s']) this.player.vy += speedAmt;
-        if (keys['a']) this.player.vx -= speedAmt;
-        if (keys['d']) this.player.vx += speedAmt;
+    spawnParticles(x, y, color, type) {
+        if (type === 'death') {
+            for (let i = 0; i < 50; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8 + 2;
+                this.particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 10 + 5,
+                    life: 60 + Math.random() * 30,
+                    maxLife: 90,
+                    color: color,
+                    type: 'pixel'
+                });
+            }
+        } else if (type === 'ring') {
+            this.particles.push({
+                x: x, y: y,
+                radius: 10,
+                maxRadius: 100,
+                life: 30,
+                maxLife: 30,
+                color: color,
+                type: 'ring'
+            });
+        }
+    },
 
-        const pSpeed = Math.hypot(this.player.vx, this.player.vy);
-        if (pSpeed > 5) {
-            this.player.vx = (this.player.vx / pSpeed) * 5;
-            this.player.vy = (this.player.vy / pSpeed) * 5;
+    updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            p.life--;
+            if (p.life <= 0) {
+                this.particles.splice(i, 1);
+                continue;
+            }
+            if (p.type === 'pixel') {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vx *= 0.95;
+                p.vy *= 0.95;
+            } else if (p.type === 'ring') {
+                p.radius += (p.maxRadius - p.radius) * 0.15;
+            }
+        }
+    },
+
+    update() {
+        if (!this.player.dead) {
+            const keys = window.GameState.keys;
+            const speedAmt = 0.4;
+            if (keys['w']) this.player.vy -= speedAmt;
+            if (keys['s']) this.player.vy += speedAmt;
+            if (keys['a']) this.player.vx -= speedAmt;
+            if (keys['d']) this.player.vx += speedAmt;
+
+            const pSpeed = Math.hypot(this.player.vx, this.player.vy);
+            if (pSpeed > 5) {
+                this.player.vx = (this.player.vx / pSpeed) * 5;
+                this.player.vy = (this.player.vy / pSpeed) * 5;
+            }
+
+            this.player.vx *= window.GameConfig.FRICTION;
+            this.player.vy *= window.GameConfig.FRICTION;
+            this.player.x += this.player.vx;
+            this.player.y += this.player.vy;
+            this.handleBoundaryCollision(this.player);
         }
 
-        this.player.vx *= window.GameConfig.FRICTION;
-        this.player.vy *= window.GameConfig.FRICTION;
-        this.player.x += this.player.vx;
-        this.player.y += this.player.vy;
-        this.handleBoundaryCollision(this.player);
+        if (!this.ai.dead) {
+            this.updateAI();
+        }
 
-        this.updateAI();
         this.updateProjectiles();
+        this.updateParticles();
         
         // Items
-        this.checkWeaponPickup(this.player);
-        this.checkWeaponPickup(this.ai);
+        if (!this.player.dead) this.checkWeaponPickup(this.player);
+        if (!this.ai.dead) this.checkWeaponPickup(this.ai);
         
         // Hearts
         for (let i = this.hearts.length - 1; i >= 0; i--) {
@@ -137,10 +193,21 @@ window.GameCore = {
 
         window.GameState.time++;
 
-        if (this.player.health <= 0) {
-            this.gameOverCallback('lose');
-        } else if (this.ai.health <= 0) {
-            this.gameOverCallback('win');
+        const checkDeath = (entity) => {
+            if (entity.health <= 0 && !entity.dead) {
+                entity.dead = true;
+                this.spawnParticles(entity.x, entity.y, entity.color, 'death');
+            }
+        };
+        checkDeath(this.player);
+        checkDeath(this.ai);
+
+        if (this.player.dead || this.ai.dead) {
+            this. मृत्युDelay = (this. मृत्युDelay || 0) + 1; // wait, let's use deathDelay
+            this.deathDelay++;
+            if (this.deathDelay > 90) {
+                this.gameOverCallback(this.player.health <= 0 ? 'lose' : 'win');
+            }
         }
     },
 
@@ -246,10 +313,12 @@ window.GameCore = {
     },
 
     checkWeaponPickup(entity) {
+        if (entity.dead) return;
         const wps = window.WeaponSystem.weapons;
         for (let i = wps.length - 1; i >= 0; i--) {
             if (Math.hypot(entity.x - wps[i].x, entity.y - wps[i].y) < entity.radius + window.GameConfig.WEAPON_SIZE) {
                 entity.weapon = wps[i].type;
+                if (this.spawnParticles) this.spawnParticles(wps[i].x, wps[i].y, wps[i].type.color, 'ring');
                 wps.splice(i, 1);
                 this.uiCallback();
             }

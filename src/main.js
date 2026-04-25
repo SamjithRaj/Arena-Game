@@ -68,6 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.GameRenderer.drawWeapons();
         window.GameRenderer.drawHearts(window.GameCore.hearts);
         window.GameRenderer.drawProjectiles();
+        if (window.GameRenderer.drawParticles && window.GameCore.particles) {
+            window.GameRenderer.drawParticles(window.GameCore.particles);
+        }
         window.GameRenderer.drawEntity(window.GameCore.player, window.GameState.time);
         window.GameRenderer.drawEntity(window.GameCore.ai, window.GameState.time);
         
